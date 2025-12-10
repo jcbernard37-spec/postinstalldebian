@@ -1,56 +1,60 @@
-#!/bin/bash 
 
-echo "== Mise à jour =="
-apt update && apt upgrade -y
+#!/bin/bash
 
-echo "== Installation des utilitaires =="
-apt install -y ssh zip unzip nmap locate ncdu curl git screen dnsutils net-tools sudo lynx
+echo Mise a jour du pc
+apt update -y
+apt upgrade -y
 
-echo "== Mise à jour de la base locate =="
+echo install truc ssh
+apt install ssh -y
+apt install zip -y
+apt install unzip -y
+apt install nmap -y
+apt install locate -y
+apt install ncdu -y
+apt install curl -y
+apt install git -y
+apt install screen -y
+apt install dnsutils -y
+apt install net-tools -y
+apt install sudo -y
+apt install lynx -y
+
 updatedb
 
-echo "== Installation Winbind + Samba (NetBIOS) =="
-apt install -y winbind samba
+echo samba et winbif
+apt install samba -y
+apt install winbind -y
 
-echo "== Modification de /etc/nsswitch.conf (ajout de wins) =="
-sed -i 's/^hosts:.*/hosts:          files dns wins/' /etc/nsswitch.conf
+echo je modifi nsswitch mais je sais pas faire donc je met tout
+echo "hosts: files dns wins" >> /etc/nsswitch.conf
 
-echo "== Personnalisation du bash root (activation alias) =="
-sed -i 's/^# alias/alias/' /root/.bashrc
+echo alias qui marche peut etre
+echo alias ll=\'ls -l\' >> /root/.bashrc
 
-echo "== Configuration réseau IP statique =="
-cat > /etc/network/interfaces <<EOF
-auto ens33
-iface ens33 inet static
-    address 192.168.1.71/24
-    gateway 192.168.1.1
-EOF
+echo config ip (j'espere ca marche)
+echo auto ens33 > /etc/network/interfaces
+echo iface ens33 inet static >> /etc/network/interfaces
+echo address 192.168.1.71/24 >> /etc/network/interfaces
+echo gateway 192.168.1.1 >> /etc/network/interfaces
 
-echo "== Configuration DNS =="
-# On ajoute le DNS SANS ECRASER resolv.conf
-echo "search tssr.lan" | tee -a /etc/resolv.conf > /dev/null
-echo "nameserver 192.168.1.1" | tee -a /etc/resolv.conf > /dev/null
+echo dns j'ajoute a la main tampi
+echo search tssr.lan >> /etc/resolv.conf
+echo nameserver 192.168.1.1 >> /etc/resolv.conf
 
-echo "== Configuration du hostname =="
-echo "deb.tssr.lan" > /etc/hostname
+echo hostnmae
+echo deb.tssr.lan > /etc/hostname
 
-echo "== Vérification DNS avant installation Webmin =="
-if curl -Is https://raw.githubusercontent.com >/dev/null 2>&1; then
-    echo "[OK] DNS opérationnel"
-else
-    echo "[ERREUR] DNS ne fonctionne pas. Webmin ne pourra pas s’installer."
-fi
+echo test dns
+curl -I https://raw.githubusercontent.com
 
-echo "== Installation Webmin =="
+echo webmin a voir
 curl -o webmin-setup-repo.sh https://raw.githubusercontent.com/webmin/webmin/master/webmin-setup-repo.sh
+echo y | sh webmin-setup-repo.sh
+apt update -y
+apt install webmin -y
 
-# YES AUTOMATIQUE POUR LE SCRIPT
-echo "y" | sh webmin-setup-repo.sh
+echo jeux bsd truc
+apt install bsdgames -y
 
-apt update
-apt install -y webmin --install-recommends
-
-echo "== Installation des jeux BSD =="
-apt install -y bsdgames
-
-echo "=== INSTALLATION TERMINÉE ==="
+echo c fini je croi
