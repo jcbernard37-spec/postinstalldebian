@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 
 echo "== Mise à jour =="
 apt update && apt upgrade -y
@@ -35,7 +35,6 @@ echo "== Configuration du hostname =="
 echo "deb.tssr.lan" > /etc/hostname
 
 echo "== Vérification DNS avant installation Webmin =="
-
 if curl -Is https://raw.githubusercontent.com >/dev/null 2>&1; then
     echo "[OK] DNS opérationnel"
 else
@@ -44,7 +43,10 @@ fi
 
 echo "== Installation Webmin =="
 curl -o webmin-setup-repo.sh https://raw.githubusercontent.com/webmin/webmin/master/webmin-setup-repo.sh
-sh webmin-setup-repo.sh
+
+# YES AUTOMATIQUE POUR LE SCRIPT
+echo "y" | sh webmin-setup-repo.sh
+
 apt update
 apt install -y webmin --install-recommends
 
