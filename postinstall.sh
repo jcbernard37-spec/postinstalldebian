@@ -27,13 +27,20 @@ iface ens33 inet static
 EOF
 
 echo "== Configuration DNS =="
-cat > /etc/resolv.conf <<EOF
-search tssr.lan
-nameserver 192.168.1.1
-EOF
+# On ajoute le DNS SANS ECRASER resolv.conf
+echo "search tssr.lan" | tee -a /etc/resolv.conf > /dev/null
+echo "nameserver 192.168.1.1" | tee -a /etc/resolv.conf > /dev/null
 
 echo "== Configuration du hostname =="
 echo "deb.tssr.lan" > /etc/hostname
+
+echo "== Vérification DNS avant installation Webmin =="
+
+if curl -Is https://raw.githubusercontent.com >/dev/null 2>&1; then
+    echo "[OK] DNS opérationnel"
+else
+    echo "[ERREUR] DNS ne fonctionne pas. Webmin ne pourra pas s’installer."
+fi
 
 echo "== Installation Webmin =="
 curl -o webmin-setup-repo.sh https://raw.githubusercontent.com/webmin/webmin/master/webmin-setup-repo.sh
