@@ -1,101 +1,32 @@
-📘 README — Script post-installation Debian
-🎯 Description
+# README — Script de post-installation Debian
 
-Ce projet contient un script permettant d’automatiser la post-installation d’un serveur Debian.
-Il installe des outils essentiels, configure le réseau, personnalise l’environnement shell, ajoute la résolution NetBIOS, et installe Webmin pour l’administration Web.
+Ce dépôt contient un script qui automatise une partie de la post-installation d’un serveur Debian.
+Je l’ai écrit pour gagner du temps après l’installation de base : installation des outils essentiels,
+configuration réseau, personnalisation minimale du shell, ajout de la résolution NetBIOS et installation
+de Webmin pour l’administration Web.
 
-⚙️ Contenu du script
+---
 
-Le script réalise :
+## 1. Description générale du script
 
-🟦 Mise à jour du système
+Le script enchaîne automatiquement plusieurs étapes :
 
+- mise à jour du système ;
+- installation des utilitaires de base ;
+- configuration de SMB / NetBIOS (winbind, samba, nsswitch.conf) ;
+- personnalisation simple du shell root (alias de sécurité) ;
+- exemple de configuration réseau en IP fixe ;
+- exemple de configuration DNS ;
+- installation de Webmin ;
+- installation optionnelle des jeux BSD.
+
+Les exemples d’adressage et de DNS sont à adapter à la machine et au réseau utilisés.
+
+---
+
+## 2. Mise à jour du système
+
+Mise à jour de la liste des paquets et installation des mises à jour disponibles :
+
+```bash
 apt update && apt upgrade -y
-
-🟩 Installation des utilitaires essentiels
-
-ssh
-
-zip / unzip
-
-nmap
-
-locate (+ updatedb)
-
-ncdu
-
-curl
-
-git
-
-screen
-
-dnsutils (dig)
-
-net-tools (ifconfig)
-
-sudo
-
-lynx
-
-🟨 Installation SMB / NetBIOS
-
-winbind
-
-samba
-
-Modifie /etc/nsswitch.conf pour ajouter :
-
-hosts: files dns wins
-
-🟪 Personnalisation du shell root
-
-Décommentage des alias dans /root/.bashrc :
-
-alias rm='rm -i'
-
-alias cp='cp -i'
-
-alias mv='mv -i'
-
-🟥 Configuration réseau (exemple)
-
-À adapter selon la machine :
-
-auto ens33
-iface ens33 inet static
-    address 192.168.X.Y/24
-    gateway 192.168.X.Z
-
-🟧 Configuration DNS
-
-Dans /etc/resolv.conf :
-
-search tssr.lan
-nameserver 192.168.X.Z
-
-🟦 Installation de Webmin
-curl -o webmin-setup-repo.sh https://raw.githubusercontent.com/webmin/webmin/master/webmin-setup-repo.sh
-sh webmin-setup-repo.sh
-apt install webmin --install-recommends -y
-
-
-Accès :
-➡️ https://votre-ip:10000
-
-🎮 Bonus : jeux systèmes BSD
-apt install bsdgames
-cd /usr/games
-./snake
-
-🏃‍♂️ Exécution du script
-
-Sur une machine Debian fraîchement installée :
-
-wget https://raw.githubusercontent.com/jcbernard37-spec/postinstalldebian/main/postinstall.sh
-sh postinstall.sh
-
-👤 Auteur
-
-Jean-Christophe Bernard – CEFIM TSSR
-Dépôt GitHub : https://github.com/jcbernard37-spec/postinstalldebian
